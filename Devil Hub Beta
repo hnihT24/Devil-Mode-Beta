@@ -1,0 +1,574 @@
+--[[
+Devil Mode GUI                                                                                                                                                                     
+--]]
+
+
+local L_1_ = "t"
+local L_2_ = game.Players.LocalPlayer:GetMouse()
+L_2_.KeyDown:Connect(
+    function(L_22_arg0)
+	if L_22_arg0 == L_1_ then
+		if DaHoodSettings.SilentAim == true then
+			DaHoodSettings.SilentAim = false
+		else
+			DaHoodSettings.SilentAim = true
+		end
+	end
+end
+)
+game:GetService("RunService").RenderStepped:Connect(
+    function()
+	for L_23_forvar0, L_24_forvar1 in pairs(game.CoreGui:GetChildren()) do
+		if L_24_forvar1.Name == "PostmansAutoRob" then
+			L_24_forvar1:Destroy()
+		end
+	end
+	for L_25_forvar0, L_26_forvar1 in pairs(game.CoreGui:GetChildren()) do
+		if L_26_forvar1.Name == "WarningGUI" then
+			L_26_forvar1:Destroy()
+		end
+	end
+end
+)
+game.StarterGui:SetCore(
+    "SendNotification",
+    {
+	Title = "Devil Mode, Made by XxNickCoollxX";
+	Text = "You're whitelisted. Dont be suspicious!";
+	Icon = "http://www.roblox.com/asset/?id=240664703";
+	Duration = 100;
+	Button1 = "Okay!";
+	Callback = NotificationBindable;
+}
+)
+local L_3_ = loadstring(game:HttpGet("https://raw.githubusercontent.com/xHeptc/Kavo-UI-Library/main/source.lua"))()
+local L_4_ = L_3_.CreateLib("Devil Mode", "Synapse")
+local L_5_ = L_4_:NewTab("Aimbot")
+local L_6_ = L_5_:NewSection("Devil Mode")
+L_6_:NewButton(
+    "Aimlock",
+    "Beam his ahh down",
+local Settings = {
+    rewrittenmain = {
+        Enabled = false,
+        Key = "q",
+        DOT = true,
+        AIRSHOT = true,
+        NOTIF = true,
+        AUTOPRED = false,
+        FOV = math.huge,
+        RESOVLER = false
+    }
+}
+--[[
+70-90 = 0.1433431
+90-120 = 0.15465
+]]
+local SelectedPart = "LowerTorso"
+local Prediction = true
+local PredictionValue =  0.1433431
+--[[
+    70-90 = 0.1433431
+    90-140 = 0.15465
+    ]]
+
+
+
+    local AnchorCount = 0
+    local MaxAnchor = 50
+
+    local CC = game:GetService"Workspace".CurrentCamera
+    local Plr;
+    local enabled = false
+    local accomidationfactor = 0.1433431
+    local mouse = game.Players.LocalPlayer:GetMouse()
+    local placemarker = Instance.new("Part", game.Workspace)
+
+    function makemarker(Parent, Adornee, Color, Size, Size2)
+        local e = Instance.new("BillboardGui", Parent)
+        e.Name = "PP"
+        e.Adornee = Adornee
+        e.Size = UDim2.new(Size, Size2, Size, Size2)
+        e.AlwaysOnTop = Settings.rewrittenmain.DOT
+        local a = Instance.new("Frame", e)
+        if Settings.rewrittenmain.DOT == true then
+        a.Size = UDim2.new(1, 0, 1, 0)
+        else
+        a.Size = UDim2.new(0, 0, 0, 0)
+        end
+        if Settings.rewrittenmain.DOT == true then
+        a.Transparency = 0
+        a.BackgroundTransparency = 0
+        else
+        a.Transparency = 1
+        a.BackgroundTransparency = 1
+        end
+        a.BackgroundColor3 = Color
+        local g = Instance.new("UICorner", a)
+        if Settings.rewrittenmain.DOT == false then
+        g.CornerRadius = UDim.new(0, 0)
+        else
+        g.CornerRadius = UDim.new(1, 1) 
+        end
+        return(e)
+    end
+
+    
+    local data = game.Players:GetPlayers()
+    function noob(player)
+        local character
+        repeat wait() until player.Character
+        local handler = makemarker(guimain, player.Character:WaitForChild(SelectedPart), Color3.fromRGB(107, 184, 255), 0.3, 3)
+        handler.Name = player.Name
+        player.CharacterAdded:connect(function(Char) handler.Adornee = Char:WaitForChild(SelectedPart) end)
+
+
+        spawn(function()
+            while wait() do
+                if player.Character then
+                end
+            end
+        end)
+    end
+
+    for i = 1, #data do
+        if data[i] ~= game.Players.LocalPlayer then
+            noob(data[i])
+        end
+    end
+
+    game.Players.PlayerAdded:connect(function(Player)
+        noob(Player)
+    end)
+
+    spawn(function()
+        placemarker.Anchored = true
+        placemarker.CanCollide = false
+        if Settings.rewrittenmain.DOT == true then
+        placemarker.Size = Vector3.new(8, 8, 8)
+        else
+        placemarker.Size = Vector3.new(0, 0, 0)
+        end
+        placemarker.Transparency = 1
+        if Settings.rewrittenmain.DOT then
+        makemarker(placemarker, placemarker, Color3.fromRGB(255, 255, 255), 0.40, 0)
+        end
+    end)
+
+    game.Players.LocalPlayer:GetMouse().KeyDown:Connect(function(k)
+        if k == Settings.rewrittenmain.Key and Settings.rewrittenmain.Enabled then
+            if enabled == true then
+                enabled = false
+                if Settings.rewrittenmain.NOTIF == true then
+                    Plr = getClosestPlayerToCursor()
+
+            end
+            else
+                Plr = getClosestPlayerToCursor()
+                enabled = true
+                if Settings.rewrittenmain.NOTIF == true then
+
+
+                end
+            end
+        end
+    end)
+
+
+
+    function getClosestPlayerToCursor()
+        local closestPlayer
+        local shortestDistance = Settings.rewrittenmain.FOV
+
+        for i, v in pairs(game.Players:GetPlayers()) do
+            if v ~= game.Players.LocalPlayer and v.Character and v.Character:FindFirstChild("Humanoid") and v.Character.Humanoid.Health ~= 0 and v.Character:FindFirstChild("HumanoidRootPart") then
+                local pos = CC:WorldToViewportPoint(v.Character.PrimaryPart.Position)
+                local magnitude = (Vector2.new(pos.X, pos.Y) - Vector2.new(mouse.X, mouse.Y)).magnitude
+                if magnitude < shortestDistance then
+                    closestPlayer = v
+                    shortestDistance = magnitude
+                end
+            end
+        end
+        return closestPlayer
+    end
+
+    local pingvalue = nil;
+    local split = nil;
+    local ping = nil;
+
+    game:GetService"RunService".Stepped:connect(function()
+        if enabled and Plr.Character ~= nil and Plr.Character:FindFirstChild("HumanoidRootPart") then
+            placemarker.CFrame = CFrame.new(Plr.Character.HumanoidRootPart.Position+(Plr.Character.HumanoidRootPart.Velocity*accomidationfactor))
+        else
+            placemarker.CFrame = CFrame.new(0, 9999, 0)
+        end
+        if Settings.rewrittenmain.AUTOPRED == true then
+             pingvalue = game:GetService("Stats").Network.ServerStatsItem["Data Ping"]:GetValueString()
+             split = string.split(pingvalue,'(')
+             ping = tonumber(split[1])
+            if ping < 130 then
+                PredictionValue = 0.151
+            elseif ping < 125 then
+                PredictionValue = 0.149
+            elseif ping < 110 then
+                PredictionValue = 0.146
+            elseif ping < 105 then
+                PredictionValue = 0.138
+            elseif ping < 90 then
+                PredictionValue = 0.136
+            elseif ping < 80 then
+                PredictionValue = 0.134
+            elseif ping < 70 then
+                PredictionValue = 0.131
+            elseif ping < 60 then
+                PredictionValue = 0.1229
+            elseif ping < 50 then
+                PredictionValue = 0.1225
+            elseif ping < 40 then
+                PredictionValue = 0.1256
+            end
+        end
+    end)
+
+    local mt = getrawmetatable(game)
+    local old = mt.__namecall
+    setreadonly(mt, false)
+    mt.__namecall = newcclosure(function(...)
+        local args = {...}
+        if enabled and getnamecallmethod() == "FireServer" and args[2] == "UpdateMousePos" and Settings.rewrittenmain.Enabled and Plr.Character ~= nil then
+
+            -- args[3] = Plr.Character.HumanoidRootPart.Position+(Plr.Character.HumanoidRootPart.Velocity*accomidationfactor)
+            --[[
+            if Settings.rewrittenmain.AIRSHOT == true then
+                if game.Workspace.Players[Plr.Name].Humanoid:GetState() == Enum.HumanoidStateType.Freefall then -- Plr.Character:WaitForChild("Humanoid"):GetState() == Enum.HumanoidStateType.Freefall
+                    
+                    --// Airshot
+                    args[3] = Plr.Character.LeftFoot.Position+(Plr.Character.LeftFoot.Velocity*PredictionValue)
+
+                else
+                    args[3] = Plr.Character.HumanoidRootPart.Position+(Plr.Character.HumanoidRootPart.Velocity*PredictionValue)
+
+                end
+            else
+                    args[3] = Plr.Character.HumanoidRootPart.Position+(Plr.Character.HumanoidRootPart.Velocity*PredictionValue)
+            end
+            ]]
+            if Prediction == true then
+                
+            args[3] = Plr.Character[SelectedPart].Position+(Plr.Character[SelectedPart].Velocity*PredictionValue)
+
+            else
+
+            args[3] = Plr.Character[SelectedPart].Position
+
+            end
+
+            return old(unpack(args))
+        end
+        return old(...)
+    end)
+
+    game:GetService("RunService").RenderStepped:Connect(function()
+        if Settings.rewrittenmain.RESOVLER == true and Plr.Character ~= nil and enabled and Settings.rewrittenmain.Enabled then
+        if Settings.rewrittenmain.AIRSHOT == true and enabled and Plr.Character ~= nil then
+            
+            if game.Workspace.Players[Plr.Name].Humanoid:GetState() == Enum.HumanoidStateType.Freefall then -- Plr.Character:WaitForChild("Humanoid"):GetState() == Enum.HumanoidStateType.Freefall
+                
+                --// Airshot
+
+                --// Anchor Check
+
+                if Plr.Character ~= nil and Plr.Character.HumanoidRootPart.Anchored == true then
+                    AnchorCount = AnchorCount + 1
+                    if AnchorCount >= MaxAnchor then
+                        Prediction = false
+                        wait(2)
+                        AnchorCount = 0;
+                    end
+                else
+                    Prediction = true
+                    AnchorCount = 0;
+                end
+
+                SelectedPart = "LeftFoot"
+
+            else
+                --// Anchor Check
+
+                if Plr.Character ~= nil and Plr.Character.HumanoidRootPart.Anchored == true then
+                    AnchorCount = AnchorCount + 1
+                    if AnchorCount >= MaxAnchor then
+                        Prediction = false
+                        wait(2)
+                        AnchorCount = 0;
+                    end
+                else
+                    Prediction = true
+                    AnchorCount = 0;
+                end
+
+                SelectedPart = "HumanoidRootPart"
+
+            end
+            else
+
+                --// Anchor Check
+
+                if Plr.Character ~= nil and Plr.Character.HumanoidRootPart.Anchored == true then
+                    AnchorCount = AnchorCount + 1
+                    if AnchorCount >= MaxAnchor then
+                        Prediction = false
+                        wait(2)
+                        AnchorCount = 0;
+                    end
+                else
+                    Prediction = true
+                    AnchorCount = 0;
+                end
+
+                SelectedPart = "HumanoidRootPart"
+            end
+
+        else
+                SelectedPart = "HumanoidRootPart"
+        end
+    end)
+L_6_:NewTextBox(
+    "Aimlock Key",
+    "Aimlock Key should be lowercase.",
+    function(L_69_arg0)
+	getgenv().AimlockKey = L_69_arg0
+end
+)
+L_6_:NewTextBox(
+    "Aimlock Prediction",
+    "Customize your aimlock prediction",
+    function(L_70_arg0)
+	PredictionVelocity = L_70_arg0
+end
+)
+L_6_:NewDropdown(
+    "AimPart",
+    "Yes",
+    {
+	"Head",
+	"UpperTorso",
+	"HumanoidRootPart",
+	"LowerTorso"
+},
+    function(L_71_arg0)
+	getgenv().AimPart = L_71_arg0
+end
+)
+local L_7_ = L_4_:NewTab("Silent Aim")
+local L_8_ = L_7_:NewSection("Devil Mode")
+L_8_:NewButton(
+    "Silent Aim",
+    "Silent Aim Toggle Key is T.",
+    function()
+	loadstring(game:HttpGetAsync("https://raw.githubusercontent.com/hnihT24/Devil-Mode/main/Silent.txt"))()
+end
+)
+L_8_:NewTextBox(
+    "Silent Aim Prediction",
+    "0.157 for low ping 0.178 high ping",
+    function(L_72_arg0)
+	DaHoodSettings.Prediction = L_72_arg0
+end
+)
+L_8_:NewDropdown(
+    "Silent Aim Part",
+    "Choose Aim Part",
+    {
+	"Head",
+	"UpperTorso",
+	"HumanoidRootPart",
+	"LowerTorso"
+},
+    function(L_73_arg0)
+	Aiming.TargetPart = L_73_arg0
+end
+)
+L_8_:NewTextBox(
+    "Silent Aim Fov",
+    "Change FOV",
+    function(L_74_arg0)
+	Aiming.FOV = L_74_arg0
+end
+)
+L_8_:NewToggle(
+    "Silent Aim Show Fov",
+    "yea",
+    function(L_75_arg0)
+	Aiming.ShowFOV = L_75_arg0
+end
+)
+local L_11_ = L_4_:NewTab("Antilock")
+local L_12_ = L_11_:NewSection("Devil Mode")
+L_12_:NewButton(
+    "Anti-Lock",
+    "Key is Z.",
+    function()
+	repeat
+		wait()
+	until game:IsLoaded()
+	getgenv().Fix = true
+	getgenv().TeclasWS = {
+		["tecla1"] = "nil",
+		["tecla2"] = "nil",
+		["tecla3"] = "H"
+	}
+	local L_121_ = game:GetService("Players")
+	local L_122_ = game:GetService("StarterGui") or "son una mierda"
+	local L_123_ = L_121_.LocalPlayer
+	local L_124_ = L_123_:GetMouse()
+	local L_125_ = getrenv()._G
+	local L_126_ = getrawmetatable(game)
+	local L_127_ = L_126_.__newindex
+	local L_128_ = L_126_.__index
+	local L_129_ = 22
+	local L_130_ = true
+	function anunciar_atentado_terrorista(L_138_arg0)
+		L_122_:SetCore("SendNotification", {
+			Title = "Anti Lock",
+			Text = L_138_arg0
+		})
+	end
+	getgenv().TECHWAREWALKSPEED_LOADED = true
+	wait(1.5)
+	anunciar_atentado_terrorista("Press  " .. TeclasWS.tecla3 .. " to turn On/Off anti lock")
+	L_124_.KeyDown:Connect(
+            function(L_139_arg0)
+		if L_139_arg0:lower() == TeclasWS.tecla1:lower() then
+			L_129_ = L_129_ + 1
+			anunciar_atentado_terrorista("æ­æ¾å¨éåº¦å·²æé« (speed = " .. tostring(L_129_) .. ")")
+		elseif L_139_arg0:lower() == TeclasWS.tecla2:lower() then
+			L_129_ = L_129_ - 1
+			anunciar_atentado_terrorista("ç©å®¶çéåº¦å·²éä½ (speed = " .. tostring(L_129_) .. ")")
+		elseif L_139_arg0:lower() == TeclasWS.tecla3:lower() then
+			if L_130_ then
+				L_130_ = false
+				anunciar_atentado_terrorista("Anti Lock: Off")
+			else
+				L_130_ = true
+				anunciar_atentado_terrorista("Anti Lock: On")
+			end
+		end
+	end
+        )
+	setreadonly(L_126_, false)
+	L_126_.__index =
+            newcclosure(
+            function(L_140_arg0, L_141_arg1)
+		local L_142_ = checkcaller()
+		if L_141_arg1 == "WalkSpeed" and not L_142_ then
+			return L_125_.CurrentWS
+		end
+		return L_128_(L_140_arg0, L_141_arg1)
+	end
+        )
+	L_126_.__newindex =
+            newcclosure(
+            function(L_143_arg0, L_144_arg1, L_145_arg2)
+		local L_146_ = checkcaller()
+		if L_130_ then
+			if L_144_arg1 == "WalkSpeed" and L_145_arg2 ~= 0 and not L_146_ then
+				return L_127_(L_143_arg0, L_144_arg1, L_129_)
+			end
+		end
+		return L_127_(L_143_arg0, L_144_arg1, L_145_arg2)
+	end
+        )
+	setreadonly(L_126_, true)
+	repeat
+		wait()
+	until game:IsLoaded()
+	local L_131_ = game:service("Players")
+	local L_132_ = L_131_.LocalPlayer
+	repeat
+		wait()
+	until L_132_.Character
+	local L_133_ = game:service("UserInputService")
+	local L_134_ = game:service("RunService")
+	local L_135_ = -0.27
+	local L_136_ = false
+	local L_137_
+	L_133_.InputBegan:connect(
+            function(L_147_arg0)
+		if L_147_arg0.KeyCode == Enum.KeyCode.LeftBracket then
+			L_135_ = L_135_ + 0.01
+			print(L_135_)
+			wait(0.2)
+			while L_133_:IsKeyDown(Enum.KeyCode.LeftBracket) do
+				wait()
+				L_135_ = L_135_ + 0.01
+				print(L_135_)
+			end
+		end
+		if L_147_arg0.KeyCode == Enum.KeyCode.RightBracket then
+			L_135_ = L_135_ - 0.01
+			print(L_135_)
+			wait(0.2)
+			while L_133_:IsKeyDown(Enum.KeyCode.RightBracket) do
+				wait()
+				L_135_ = L_135_ - 0.01
+				print(L_135_)
+			end
+		end
+		if L_147_arg0.KeyCode == Enum.KeyCode.Z then
+			L_136_ = not L_136_
+			if L_136_ == true then
+				repeat
+					game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame =
+                                game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame +
+                                game.Players.LocalPlayer.Character.Humanoid.MoveDirection * L_135_
+					game:GetService("RunService").Stepped:wait()
+				until L_136_ == false
+			end
+		end
+	end
+        )
+end
+)
+local L_13_ = L_4_:NewTab("Settings")
+local L_14_ = L_13_:NewSection("Devil Mode")
+L_14_:NewKeybind(
+    "Keybind Gui Toggle",
+    "h",
+    Enum.KeyCode.V,
+    function()
+	L_3_:ToggleUI()
+end
+)
+local L_17_ = L_4_:NewTab("ESP")
+local L_18_ = loadstring(game:HttpGet("https://kiriot22.com/releases/ESP.lua"))()
+local L_19_ = L_17_:NewSection("Devil Mode")
+L_19_:NewToggle(
+    "ESP",
+    "ESP",
+    function(L_201_arg0)
+	L_18_:Toggle(L_201_arg0)
+end
+)
+L_19_:NewToggle(
+    "Tracers",
+    "ESP Tracers",
+    function(L_202_arg0)
+	L_18_.Tracers = L_202_arg0
+end
+)
+L_19_:NewToggle(
+    "Names",
+    "ESP Names",
+    function(L_203_arg0)
+	L_18_.Names = L_203_arg0
+end
+)
+L_19_:NewToggle(
+    "Boxes",
+    "ESP Boxes",
+    function(L_204_arg0)
+	L_18_.Boxes = L_204_arg0
+end
+)
