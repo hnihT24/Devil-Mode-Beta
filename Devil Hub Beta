@@ -33,7 +33,7 @@ end
 game.StarterGui:SetCore(
     "SendNotification",
     {
-	Title = "Devil Mode, Made by XxNickCoollxX";
+	Title = "Devil Mode";
 	Text = "You're whitelisted. Dont be suspicious!";
 	Icon = "http://www.roblox.com/asset/?id=240664703";
 	Duration = 100;
@@ -48,9 +48,10 @@ local L_6_ = L_5_:NewSection("Devil Mode")
 L_6_:NewButton(
     "Aimlock",
     "Beam his ahh down",
+    function()
 local Settings = {
     rewrittenmain = {
-        Enabled = false,
+        Enabled = true,
         Key = "q",
         DOT = true,
         AIRSHOT = true,
@@ -63,17 +64,14 @@ local Settings = {
 --[[
 70-90 = 0.1433431
 90-120 = 0.15465
-]]
+--]]
 local SelectedPart = "LowerTorso"
 local Prediction = true
 local PredictionValue =  0.1433431
 --[[
     70-90 = 0.1433431
     90-140 = 0.15465
-    ]]
-
-
-
+--]]
     local AnchorCount = 0
     local MaxAnchor = 50
 
@@ -175,7 +173,6 @@ local PredictionValue =  0.1433431
     end)
 
 
-
     function getClosestPlayerToCursor()
         local closestPlayer
         local shortestDistance = Settings.rewrittenmain.FOV
@@ -275,7 +272,6 @@ local PredictionValue =  0.1433431
             
             if game.Workspace.Players[Plr.Name].Humanoid:GetState() == Enum.HumanoidStateType.Freefall then -- Plr.Character:WaitForChild("Humanoid"):GetState() == Enum.HumanoidStateType.Freefall
                 
-                --// Airshot
 
                 --// Anchor Check
 
@@ -346,19 +342,6 @@ L_6_:NewTextBox(
     "Customize your aimlock prediction",
     function(L_70_arg0)
 	PredictionVelocity = L_70_arg0
-end
-)
-L_6_:NewDropdown(
-    "AimPart",
-    "Yes",
-    {
-	"Head",
-	"UpperTorso",
-	"HumanoidRootPart",
-	"LowerTorso"
-},
-    function(L_71_arg0)
-	getgenv().AimPart = L_71_arg0
 end
 )
 local L_7_ = L_4_:NewTab("Silent Aim")
